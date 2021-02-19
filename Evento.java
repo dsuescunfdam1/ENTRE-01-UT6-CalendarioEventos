@@ -12,6 +12,7 @@ public class Evento {
     private LocalDate fecha;
     private LocalTime horaInicio;
     private LocalTime horaFin;
+
     private static DateTimeFormatter formateadorFecha = DateTimeFormatter
         .ofPattern("dd/MM/yyyy");
     private static DateTimeFormatter formateadorHora = DateTimeFormatter
@@ -24,10 +25,29 @@ public class Evento {
      */                 
     public Evento(String nombre, String fecha, String horaInicio,
     String horaFin) {
-         
+        this.nombre = CadenaN(nombre);
+        this.fecha = LocalDate.parse(fecha, formateadorFecha);
+        this.horaInicio = LocalTime.parse(horaInicio, formateadorHora);
+        this.horaFin = LocalTime.parse(horaFin, formateadorHora);
     }
 
-   
+
+
+    private String CadenaN(String nombre){
+        String str = "";
+        nombre = nombre.trim();
+        String[] arrayN = nombre.split("\\s+");
+        for(int i = 0; i < arrayN.length; i++){
+            String nueva = "";
+            char primeraLetra = arrayN[i].charAt(0);
+            String caracter = String.valueOf(primeraLetra);
+            String nuevaC = arrayN[i].substring(1);
+            nueva = caracter.toUpperCase() + nuevaC;
+
+            str += " " + nueva;
+        }
+        return str;
+    }
 
     /**
      * accesor para el nombre del evento
@@ -90,7 +110,7 @@ public class Evento {
      * que se obtendrá a partir de la fecha del evento
      */
     public int getDia() {
-        return 0;
+      return fecha.getDayOfWeek().getValue();
     }
 
     /**
@@ -98,14 +118,32 @@ public class Evento {
      * que se obtendrá a partir de la fecha del evento
      */
     public Mes getMes() {
-        return null;
+        int queMes = fecha.getMonthValue();
+        Mes[] meses = Mes.values();
+        return meses[queMes - 1];
     }
 
     /**
      * calcula y devuelve la duración del evento en minutos
      */
     public int getDuracion() {
-        return 0;
+        int inicioH = horaInicio.getHour();
+        int inicioM = horaInicio.getMinute();
+        int finH = horaFin.getHour();
+        int finM = horaFin.getMinute();
+        int totalH = 0;
+        int totalM = 0;
+        if(inicioM > finM){
+            totalH =  finH - inicioH - 1;
+            totalM = (60 -inicioM) + finM + (totalH * 60);
+             return totalM;
+        }
+        else{
+            totalH =  finH - inicioH;
+            totalM = finM - inicioM + (totalH * 60);
+             return totalM;
+        }
+       
 
     }
 
@@ -117,11 +155,19 @@ public class Evento {
      * Pista! usa un objeto LocalDateTime
      */
     public boolean antesDe(Evento otro) {
-        return true;
-
+        boolean confirmamos = true;
+        LocalDateTime actual =  LocalDateTime.of(getFecha(), getHoraInicio());
+        LocalDateTime parametro =  LocalDateTime.of(otro.getFecha(), otro.getHoraInicio());
+        
+        if(actual.compareTo(parametro) > 0){
+            confirmamos = true;
+        }
+        else if(actual.compareTo(parametro) <= 0){
+            confirmamos = false;
+        }
+        return confirmamos;
     }
 
-  
     /**
      * representación textual del evento  
      */
