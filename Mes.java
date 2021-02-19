@@ -2,7 +2,7 @@
 /**
  * Enumeration class Mes - write a description of the enum class here
  * 
- * @author (your name here)
+ * @author (David Suescun)
  * @version (version number or date here)
  */
 public enum Mes

@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * Representa a un evento del calendario
- * 
+ * @author David Suescun
  */
 public class Evento {
     private String nombre;
